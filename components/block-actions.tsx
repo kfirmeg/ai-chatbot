@@ -91,7 +91,6 @@ export const BlockActions = memo(PureBlockActions, (prevProps, nextProps) => {
   if (prevProps.currentVersionIndex !== nextProps.currentVersionIndex)
     return false;
   if (prevProps.isCurrentVersion !== nextProps.isCurrentVersion) return false;
-  if (prevProps.block.content !== nextProps.block.content) return false;
 
   return true;
 });

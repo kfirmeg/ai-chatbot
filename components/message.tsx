@@ -8,12 +8,7 @@ import { memo, useMemo, useState } from 'react';
 import type { Vote } from '@/lib/db/schema';
 
 import { DocumentToolCall, DocumentToolResult } from './document';
-import {
-  ChevronDownIcon,
-  LoaderIcon,
-  PencilEditIcon,
-  SparklesIcon,
-} from './icons';
+import { PencilEditIcon, SparklesIcon } from './icons';
 import { Markdown } from './markdown';
 import { MessageActions } from './message-actions';
 import { PreviewAttachment } from './preview-attachment';
@@ -24,7 +19,6 @@ import { Button } from './ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { MessageEditor } from './message-editor';
 import { DocumentPreview } from './document-preview';
-import { MessageReasoning } from './message-reasoning';
 
 const PurePreviewMessage = ({
   chatId,
@@ -74,7 +68,7 @@ const PurePreviewMessage = ({
             </div>
           )}
 
-          <div className="flex flex-col gap-4 w-full">
+          <div className="flex flex-col gap-2 w-full">
             {message.experimental_attachments && (
               <div className="flex flex-row justify-end gap-2">
                 {message.experimental_attachments.map((attachment) => (
@@ -86,14 +80,7 @@ const PurePreviewMessage = ({
               </div>
             )}
 
-            {message.reasoning && (
-              <MessageReasoning
-                isLoading={isLoading}
-                reasoning={message.reasoning}
-              />
-            )}
-
-            {(message.content || message.reasoning) && mode === 'view' && (
+            {message.content && mode === 'view' && (
               <div className="flex flex-row gap-2 items-start">
                 {message.role === 'user' && !isReadonly && (
                   <Tooltip>
@@ -222,8 +209,6 @@ export const PreviewMessage = memo(
   PurePreviewMessage,
   (prevProps, nextProps) => {
     if (prevProps.isLoading !== nextProps.isLoading) return false;
-    if (prevProps.message.reasoning !== nextProps.message.reasoning)
-      return false;
     if (prevProps.message.content !== nextProps.message.content) return false;
     if (
       !equal(

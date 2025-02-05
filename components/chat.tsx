@@ -14,18 +14,17 @@ import { MultimodalInput } from './multimodal-input';
 import { Messages } from './messages';
 import { VisibilityType } from './visibility-selector';
 import { useBlockSelector } from '@/hooks/use-block';
-import { toast } from 'sonner';
 
 export function Chat({
   id,
   initialMessages,
-  selectedChatModel,
+  selectedModelId,
   selectedVisibilityType,
   isReadonly,
 }: {
   id: string;
   initialMessages: Array<Message>;
-  selectedChatModel: string;
+  selectedModelId: string;
   selectedVisibilityType: VisibilityType;
   isReadonly: boolean;
 }) {
@@ -43,17 +42,13 @@ export function Chat({
     reload,
   } = useChat({
     id,
-    body: { id, selectedChatModel: selectedChatModel },
+    body: { id, modelId: selectedModelId },
     initialMessages,
     experimental_throttle: 100,
     sendExtraMessageFields: true,
     generateId: generateUUID,
     onFinish: () => {
       mutate('/api/history');
-    },
-    onError: (error) => {
-      console.log(error);
-      toast.error('An error occured, please try again!');
     },
   });
 
@@ -70,7 +65,7 @@ export function Chat({
       <div className="flex flex-col min-w-0 h-dvh bg-background">
         <ChatHeader
           chatId={id}
-          selectedModelId={selectedChatModel}
+          selectedModelId={selectedModelId}
           selectedVisibilityType={selectedVisibilityType}
           isReadonly={isReadonly}
         />
